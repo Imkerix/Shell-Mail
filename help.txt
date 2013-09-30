@@ -1,0 +1,14 @@
+Help section :
+		
+Usage : [Argument] (Argument Relevant subarguments)
+		
+Argument : short explaination
+	subargument1
+	subargument2
+	...
+
+Arguments:
+
+-mkAccount : creates an account
+	-acc_name : the name of the account.
+-help : shows this page.
