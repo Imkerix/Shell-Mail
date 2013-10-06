@@ -1,6 +1,8 @@
 package account;
 
-public class OutboxServer 
+import java.io.Serializable;
+
+public class OutboxServer implements Serializable
 {
 	private String outboxServer;
 	private int port;

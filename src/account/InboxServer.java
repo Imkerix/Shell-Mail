@@ -1,17 +1,19 @@
 package account;
 
-public class InboxServer 
+import java.io.Serializable;
+
+public class InboxServer implements Serializable
 {
 	private String inboxServer;
 	private int port;
 	
-	public InboxServer(String p_outboxServer, int p_port)
+	public InboxServer(String p_inboxServer, int p_port)
 	{
-		inboxServer = p_outboxServer;
+		inboxServer = p_inboxServer;
 		port = p_port;
 	}
 
-	public String getOutboxServer() 
+	public String getinboxServer() 
 	{
 		return inboxServer;
 	}

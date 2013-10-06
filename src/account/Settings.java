@@ -1,6 +1,8 @@
 package account;
 
-public class Settings 
+import java.io.Serializable;
+
+public class Settings implements Serializable
 {
 
 }

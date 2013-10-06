@@ -1,23 +1,20 @@
 package floatingObjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;				
+import java.util.Date;
 
-public class Mail 
+public class Mail implements Serializable
 {
 
 	private String subject,content,senderEmail,recipientEmail,cc,bcc;
+	private Date date = new Date();
+	private int mail_id;
 	private ArrayList<String> attachements = null;
 	
-	
-	public Mail(String p_subject,String p_content,String p_senderEmail,String p_recipientEmail,String p_cc,String p_bcc, ArrayList<String> p_attachments)
+	public Mail(int p_mail_id)
 	{
-		subject = p_subject;
-		content = p_content;
-		senderEmail = p_senderEmail;
-		recipientEmail = p_recipientEmail;
-		cc = p_cc;
-		bcc = p_bcc;
-		attachements = p_attachments;
+		mail_id = p_mail_id;
 	}
 
 //// Begin : Subject ////
@@ -104,6 +101,10 @@ public class Mail
 	}
 //// End : Attachements ////	
 	
+	public int getMail_id()
+	{
+		return mail_id;
+	}
 	
 	
 	

@@ -1,16 +1,19 @@
 package floatingObjects;
 
+import java.io.Serializable;
 //import java.util.ArrayList;
 import java.util.Date;
 
-public class Contact 
+public class Contact implements Serializable
 {
 
 	private String name,familyname,email,tel,mobile,street,country;
 	private int housenumber;
 	private Date birthday;
 	
-	public Contact(String p_name, String p_familyname, String p_email, String p_tel, String p_mobile, String p_street,int p_housenumber,String p_country,Date p_birthday )
+	private int contact_id;
+	
+	public Contact(int p_contact_id, String p_name, String p_familyname, String p_email, String p_tel, String p_mobile, String p_street,int p_housenumber,String p_country,Date p_birthday )
 	{
 		name = p_name;
 		familyname = p_familyname;
@@ -21,6 +24,7 @@ public class Contact
 		housenumber = p_housenumber;
 		country = p_country;
 		birthday = p_birthday;
+		contact_id = p_contact_id;
 	}
 //// Begin : name ////
 	public String getName() 
@@ -121,6 +125,10 @@ public class Contact
 		this.birthday = birthday;
 	}
 //// End : Birthday ////
+	public int getContact_id() 
+	{
+		return contact_id;
+	}
 	
 	
 //	public Object get(String p_ValueToGet){
