@@ -3,12 +3,71 @@ Help section :
 Usage : [Argument] (Argument Relevant subarguments)
 		
 Argument : short explaination
-	subargument1
-	subargument2
-	...
+	subarguments in order the programm wants to get them. : explaination
+
 
 Arguments:
+##############
+-mkAccount : creates an account.
+	accountname 	: The name of the account.
+	inboxserver 	: The name of the inboxserver belonging to the account.
+	22 		: The port of the inboxserver belonging to the account.
+	outboxserver 	: The name of the outboxserver belonging to the account.
+	255		: The port of the outboxserver belonging to the account.
+-------------
+-rmAccount : deletes an account.
+	accountname	: The name of the account to delete.
+-------------
+-getAccount : Returns a property of an account. 
+	accountname 	: The name of the account you want to know a property from.
+	valueToGet	: The name of the property you want to know.
+-------------
+-getAccounts : Lists all existing accounts.
+-------------
+-modAccount : Modifies an account you can add or change settings and content with this command.
+	accountname 	: The account to modify.
+	some property 	: The property you want to change.
+	new value	: The value you want to set.
+###############
+###############
+-mkMail : creates a new mail.
+	accountname	: The account the new mail will be createt in.
+	1		: The id of the new mail. (Be careful not to use the id more than once)
+-------------
+-rmMail : deletes a mail.
+	accountname 	: The account that contains the mail.
+	1		: The id of the mail.
+-------------
+-modMail : modifies a mail.
+	accountname	: The account that contains the mail.
+	1		: The id of the mail.
+	senderemail	: The property to change.
+	Imkerix@live.de	: The value to set for the property.
 
--mkAccount : creates an account
-	-acc_name : the name of the account.
--help : shows this page.
+// If you chose "content" as property the following text can have blank spaces. Like this:
+// -modMail exampleAccount 1 content das hier ist der bispielt text der später in der Email stehen würde.
+-------------
+-getMail : Returns a property of a mail.
+	accountname	: The account that contains the mail.
+	1		: The id of the mail.
+	senderemail	: The name of the property you want to know.
+// If you want to know which mails are in an account use this without id and property, like this:
+// -getMail exampleAccount
+###############
+###############
+-mkContact : creates a contact.
+	accountName 		: The name of the contact.
+	1			: The id of the new contact. (Be careful not to use the id more than once)
+	Erik			: The name of the account user. 
+	Heinisch		: The familyname of the account user.
+	imkerix@live.de		: The email address of the account user.
+	06441/24936		: The telephonnumber of the account user.
+	0345/349502794924	: The telephonnumber of the users mobile.
+	karlstraße		: The street the account user lives in.
+	3 			: The housenumber of the users house.
+	germany			: The nationality of the user.
+	22-03-1995 "dd-MM-yyyy"	: The users birthday.
+
+###############
+###############
+-help : shows this beautyful page.
