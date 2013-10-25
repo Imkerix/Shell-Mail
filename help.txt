@@ -70,4 +70,4 @@ Arguments:
 
 ###############
 ###############
--help : shows this beautyful page.
+-help : shows this beautiful page.
