@@ -22,7 +22,7 @@ Arguments:
 	accountname 	: The name of the account you want to know a property from.
 	valueToGet	: The name of the property you want to know.
 -------------
--getAccounts : Lists all existing accounts.
+-getAccount : Lists all existing accounts.
 -------------
 -modAccount : Modifies an account you can add or change settings and content with this command.
 	accountname 	: The account to modify.
