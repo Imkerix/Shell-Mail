@@ -2,6 +2,7 @@ package account;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class InboxServer implements Serializable
 {
 	private String inboxServer;
@@ -18,8 +19,18 @@ public class InboxServer implements Serializable
 		return inboxServer;
 	}
 
+	public void setInboxServer(String inboxServer) 
+	{
+		this.inboxServer = inboxServer;
+	}
+
 	public int getPort() 
 	{
 		return port;
+	}
+	
+	public void setPort(int port) 
+	{
+		this.port = port;
 	}
 }
