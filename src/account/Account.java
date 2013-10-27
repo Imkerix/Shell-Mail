@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import floatingObjects.Contact;
 import floatingObjects.Mail;
 
+@SuppressWarnings("serial")
 public class Account implements Serializable
 {
 
@@ -17,8 +18,8 @@ public class Account implements Serializable
   private InboxServer inboxServer;
   private OutboxServer outboxServer;
   
-  private HashMap<Mail, String> mails;
-  private HashMap<Contact, String> contacts;
+  private HashMap<Mail, String> mails = new HashMap<Mail, String>();
+  private HashMap<Contact, String> contacts = new HashMap<Contact, String>();
   
   public Account(String p_accName, String p_inboxServer, String p_inboxServerPort, String p_outboxServer, String p_outboxServerPort)
   {
@@ -27,20 +28,29 @@ public class Account implements Serializable
 	  outboxServer = new OutboxServer(p_outboxServer, Integer.parseInt(p_outboxServerPort));
   }
 	
-	public String getAccName()
-	{
-		return accName;
-	}
-	
-	
 	//// Begin : Mail ////
 		public void mkMail(int p_mail_id)
 		{
 			mails.put(new Mail(p_mail_id), "drafts");
 		}
-	
-		
 		public void rmMail(int p_mail_id) 
+		{
+			int i = 0;
+			while (i < mails.keySet().size()) 
+			{
+				if(Integer.parseInt((String) ((Mail) mails.keySet().toArray()[i]).get("mailid")) == p_mail_id)
+		        {
+					// no i++; here because a Hashmap shrinks if you delete stuff so i++; would make the code jump over one entry.
+		        	mails.remove(mails.keySet().toArray()[i]);
+		        }
+				else
+				{
+					// nothing is removed so i++;
+					i++;
+				}
+			}
+		}
+		public void getMail(int p_mail_id, String p_ArgumentToGet)
 		{
 			Iterator<Entry<Mail, String>> iterator = mails.entrySet().iterator();
 			
@@ -48,15 +58,38 @@ public class Account implements Serializable
 		    {
 		        Map.Entry<Mail, String> pair = (Entry<Mail, String>)iterator.next();
 		        
-		        if(pair.getKey().getMail_id() == p_mail_id)
+		        if(Integer.parseInt((String) pair.getKey().get("mailid")) == p_mail_id)
 		        {
-		        	mails.remove(pair.getKey());
+		        	System.out.println(pair.getKey().get(p_ArgumentToGet));
 		        }
-		        
-		        iterator.remove(); // avoids a ConcurrentModificationException
 		    }
 		}
-	//// End : Mail ////
+		public void getMail()
+		{
+			Iterator<Entry<Mail, String>> iterator = mails.entrySet().iterator();
+			
+		    while (iterator.hasNext()) 
+		    {
+		        Map.Entry<Mail, String> pair = (Entry<Mail, String>)iterator.next();
+		        
+		        System.out.println(pair.getKey().get("mailid"));
+		    }
+		}
+		public void modMail(String[] args)
+		{
+			Iterator<Entry<Mail, String>> iterator = mails.entrySet().iterator();
+			
+		    while (iterator.hasNext()) 
+		    {
+		        Map.Entry<Mail, String> pair = (Entry<Mail, String>)iterator.next();
+		        
+		        if(Integer.parseInt((String) pair.getKey().get("mailid")) == Integer.parseInt(args[2]))
+		        {
+		        	pair.getKey().set(args);
+		        }
+		    }
+		}
+	//// End : Mail //// 
 	//// Begin : Contact ////	
 		public void mkContact(int p_contact_id, String p_name, String p_familyname, String p_email, String p_tel, String p_mobile, String p_street,int p_housenumber,String p_country,Date p_birthday)
 		{
@@ -64,19 +97,104 @@ public class Account implements Serializable
 		}
 		public void rmContact(int p_contact_id)
 		{
+			int i = 0;
+			while (i < contacts.keySet().size()) 
+			{
+				if((int)(((Contact) contacts.keySet().toArray()[i]).get("contactid")) == p_contact_id)
+		        {
+					// no i++; here because a Hashmap shrinks if you delete stuff so i++; would make the code jump over one entry.
+					contacts.remove(contacts.keySet().toArray()[i]);
+		        }
+				else
+				{
+					// nothing is removed so i++;
+					i++;
+				}
+			}
+		}
+		public void getContact(int p_Contact_id, String p_ArgumentToGet) 
+		{
 			Iterator<Entry<Contact, String>> iterator = contacts.entrySet().iterator();
 			
 		    while (iterator.hasNext()) 
 		    {
-		        Entry<Contact, String> pair = (Entry<Contact, String>)iterator.next();
+		        Map.Entry<Contact, String> pair = (Entry<Contact, String>)iterator.next();
 		        
-		        if(pair.getKey().getContact_id() == p_contact_id)
+		        if((int)(pair.getKey().get("contactid")) == p_Contact_id)
 		        {
-		        	contacts.remove(pair.getKey());
+		        	System.out.println(pair.getKey().get(p_ArgumentToGet));
 		        }
+		    }
+		}
+		public void getContact() 
+		{
+			Iterator<Entry<Contact, String>> iterator = contacts.entrySet().iterator();
+			
+		    while (iterator.hasNext()) 
+		    {
+		        Map.Entry<Contact, String> pair = (Entry<Contact, String>)iterator.next();
 		        
-		        iterator.remove(); // avoids a ConcurrentModificationException
+		        	System.out.println(pair.getKey().get("contactid"));
+		    }
+		}
+		public void modContact(String[] args)
+		{
+			Iterator<Entry<Contact, String>> iterator = contacts.entrySet().iterator();
+			
+		    while (iterator.hasNext()) 
+		    {
+		        Map.Entry<Contact, String> pair = (Entry<Contact, String>)iterator.next();
+		        
+		        if((int)(pair.getKey().get("contactid")) == Integer.parseInt(args[2]))
+		        {
+		        	pair.getKey().set(args[3],args[4]);
+		        }
 		    }
 		}
 	//// End : Contact //// 	
+
+	//// Begin : Ultimative getter ////
+		public Object get(String p_ArgumentToGet)
+		{
+			switch (p_ArgumentToGet) 
+			{
+				case "accountname": return accName;	
+				case "inboxservername": return inboxServer.getinboxServer();
+				case "inboxserverport": return inboxServer.getPort();
+				case "outboxservername": return outboxServer.getOutboxServer();
+				case "outboxserverport": return outboxServer.getPort();
+			
+				default: return "Account oder Argument fehlerhaft";	
+			}
+		}
+	//// Begin : Ultimative getter ////	
+	//// Begin : Ultimative setter ////
+		public Object set(String p_ArgumentToChange, String p_ValueToSet)
+		{
+			switch (p_ArgumentToChange) 
+			{
+				case "accountname": 
+					accName = p_ValueToSet;
+				return p_ArgumentToChange+"="+p_ValueToSet;	
+				
+				case "inboxservername": 
+					inboxServer.setInboxServer(p_ValueToSet);
+				return p_ArgumentToChange+"="+p_ValueToSet;
+				
+				case "inboxserverport": 
+					inboxServer.setPort(Integer.parseInt(p_ValueToSet));
+				return p_ArgumentToChange+"="+p_ValueToSet;
+				
+				case "outboxServername":
+					outboxServer.setOutboxServer(p_ValueToSet);
+				return p_ArgumentToChange+"="+p_ValueToSet;
+				
+				case "outboxServerport":
+					outboxServer.setPort(Integer.parseInt(p_ValueToSet));
+				return p_ArgumentToChange+"="+p_ValueToSet;
+			
+				default: return "Account oder Argument fehlerhaft";	
+			}
+		}
+	//// Begin : Ultimative setter ////		
 }
