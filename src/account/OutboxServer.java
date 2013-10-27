@@ -2,6 +2,7 @@ package account;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class OutboxServer implements Serializable
 {
 	private String outboxServer;
@@ -17,10 +18,20 @@ public class OutboxServer implements Serializable
 	{
 		return outboxServer;
 	}
+	
+	public void setOutboxServer(String outboxServer) 
+	{
+		this.outboxServer = outboxServer;
+	}
 
 	public int getPort() 
 	{
 		return port;
+	}
+
+	public void setPort(int port) 
+	{
+		this.port = port;
 	}
 	
 }
