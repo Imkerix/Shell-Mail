@@ -18,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import floatingObjects.Mail;
 import account.Account;
 
 /**
@@ -29,6 +31,7 @@ public class JavaLogic
 	
 	private  String saveFile = "SaveFile";
 	private  ArrayList<Account> accounts = new ArrayList<Account>();
+	private MethodBearer methodBearer = new MethodBearer();
 
 	public JavaLogic(String[] args)
 	{
@@ -76,49 +79,41 @@ public class JavaLogic
 		private void rmAccount(String[] args) 
 		{
 			//Account := accountName
-			int i = 0;
-			while (i < accounts.size()) 
+			Account obj = (Account) methodBearer.contains(accounts, args, "accountname",1);
+			if(obj!=null)
 			{
-				if(accounts.get(i).get("accountname").equals(args[1]))
+				File oldAccount = new File (saveFile+File.separator+obj.get("accountname"));
+				if(oldAccount.exists())
 				{
-					i++;
-					File oldAccount = new File (saveFile+File.separator+accounts.get(i-1).get("accountname"));
-					if(oldAccount.exists())
-					{
-						oldAccount.delete();
-					}
-					accounts.remove(i-1);
+					oldAccount.delete();
 				}
-				else
-				{
-					i++;
-				}
+				accounts.remove(obj);
 			}
 		}
 		private void getAccount(String[] args)
 		{
 			//Account := accountName attributToGet
-			for (Account acc : accounts ) 
+			Account obj = (Account) methodBearer.contains(accounts, args, "accountname",1);
+			if(obj!=null)
 			{
 				if(args.length == 1)
 				{
-					System.out.println(acc.get("accountname"));
+					System.out.println(obj.get("accountname"));
 				}
-				else if(acc.get("accountname").equals(args[1]))
+				else
 				{
-						System.out.println(acc.get(args[2]));
+					System.out.println(obj.get(args[2]));
 				}
 			}
+			
 		}
 		private void modAccount(String[] args)
 		{
 			//Account := accountName attributToSet Value
-			for (Account acc : accounts ) 
+			Object obj = methodBearer.contains(accounts, args, "accountname",1);
+			if(obj!=null)
 			{
-				if(acc.get("accountname").equals(args[1]))
-				{
-					acc.set(args[2], args[3]);
-				}
+				 ((Account) obj).set(args[2], args[3]);
 			}
 		}
 	//// End : Account
@@ -126,117 +121,103 @@ public class JavaLogic
 		private void mkMail(String[] args) 
 		{
 			//Mail := accountName mail_id attributToSet Value
-			for (Account acc : accounts) 
+			Object obj = methodBearer.contains(accounts, args, "accountname",1);
+			if(obj!=null)
 			{
-				if(acc.get("accountname").equals(args[1]))
-				{
-					acc.mkMail(Integer.parseInt(args[2]));
-				}
+				 ((Account) obj).mkMail(Integer.parseInt(args[2]));
 			}
 		}
 		private void rmMail(String[] args) 
 		{
 			//Mail := accountname mail_id
-			for (Account acc : accounts) 
+			Object obj = methodBearer.contains(accounts, args, "accountname",1);
+			if(obj!=null)
 			{
-				if(acc.get("accountname").equals(args[1]))
-				{
-					acc.rmMail(Integer.parseInt(args[2]));
-				}
+				 ((Account) obj).rmMail(Integer.parseInt(args[2]));
 			}
 		}
 		private void getMail(String[] args) 
 		{
 			//Mail := accountname mail_id attributToGet
-			for (Account acc : accounts) 
+			Account obj = (Account) methodBearer.contains(accounts, args, "accountname",1);
+			if(obj!=null)
 			{
-				if(acc.get("accountname").equals(args[1]))
+				if(args.length == 2)
 				{
-					if(args.length == 2)
-					{
-						acc.getMail();
-					}
-					else
-					{
-						acc.getMail(Integer.parseInt(args[2]), args[3]);
-					}
+					obj.getMail();
+				}
+				else
+				{
+					obj.getMail(Integer.parseInt(args[2]), args[3]);
 				}
 			}
 		}
 		private void modMail(String[] args) 
 		{
 			//Mail := accountname mail_id
-			for (Account acc : accounts) 
+			Object obj = methodBearer.contains(accounts, args, "accountname",1);
+			if(obj!=null)
 			{
-				if(acc.get("accountname").equals(args[1]))
-				{
-					acc.modMail(args);
-				}
+				((Account) obj).modMail(args);
 			}
 		}
+	//// End : Mail
+	//// Begin : Contact
 	//// End : Mail
 	////Begin : Contact
 		private void mkContact(String[] args)  
 		{
 			//Contact := accountName contact_id name familyname email tel mobile street housenumber country birthday_like:"dd-MM-yyyy"
-			for (Account acc : accounts) 
+			Object obj = methodBearer.contains(accounts, args, "accountname",1);
+			if(obj!=null)
 			{
-				if(acc.get("accountname").equals(args[1]))
+				try 
 				{
-					try 
-					{
-						String dateString = args[11];
-						Date date = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).parse(dateString);
-						acc.mkContact(Integer.parseInt(args[2]), args[3], args[4], args[5], args[6], args[7],args[8], Integer.parseInt(args[9]), args[10], date);
-					}
-					catch (ParseException e) 
-					{
-						e.printStackTrace();
-					}
+					String dateString = args[11];
+					Date date = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).parse(dateString);
+					((Account) obj).mkContact(Integer.parseInt(args[2]), args[3], args[4], args[5], args[6], args[7],args[8], Integer.parseInt(args[9]), args[10], date);
+				}
+				catch (ParseException e) 
+				{
+					e.printStackTrace();
 				}
 			}
 		}
 		private void rmContact(String[] args) 
 		{
 			//Contact := accountname contact_id
-			for (Account acc : accounts) 
+			Object obj = methodBearer.contains(accounts, args, "accountname",1);
+			if(obj!=null)
 			{
-				if(acc.get("accountname").equals(args[1]))
-				{
-					acc.rmContact(Integer.parseInt(args[2]));
-				}
+				((Account) obj).rmContact(Integer.parseInt(args[2]));
 			}
 		}
 		private void getContact(String[] args)
 		{
 			//Contact := accountname contact_id attributToGet
-			for (Account acc : accounts) 
+			Account obj = (Account) methodBearer.contains(accounts, args, "accountname",1);
+			if(obj!=null)
 			{
-				
-				if(acc.get("accountname").equals(args[1]))
+				if(args.length == 2)
 				{
-					if(args.length == 2)
-					{
-						acc.getContact();
-					}
-					else
-					{
-						acc.getContact(Integer.parseInt(args[2]), args[3]);
-					}
+					obj.getContact();
+				}
+				else
+				{
+					obj.getContact(Integer.parseInt(args[2]), args[3]);
 				}
 			}
 		}
 		private void modContact(String[] args)
 		{
 			//Contact := accountname contact_id
-			for (Account acc : accounts) 
+			Object obj = methodBearer.contains(accounts, args, "accountname",1);
+			if(obj!=null)
 			{
-				if(acc.get("accountname").equals(args[1]))
-				{
-					acc.modContact(args);
-				}
+				((Account) obj).modContact(args);
 			}
 		}
+	//// End : Contact
 	//// End : Contact
 
 	private void printHelp() 
