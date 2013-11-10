@@ -7,16 +7,19 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import logic.MethodBearer;
+import logic.ToItterate;
 import floatingObjects.Contact;
 import floatingObjects.Mail;
 
 @SuppressWarnings("serial")
-public class Account implements Serializable
+public class Account implements Serializable, ToItterate
 {
 
   private String accName;	
   private InboxServer inboxServer;
   private OutboxServer outboxServer;
+  private MethodBearer methodBearer = new MethodBearer();
   
   private HashMap<Mail, String> mails = new HashMap<Mail, String>();
   private HashMap<Contact, String> contacts = new HashMap<Contact, String>();
@@ -66,14 +69,20 @@ public class Account implements Serializable
 		}
 		public void getMail()
 		{
-			Iterator<Entry<Mail, String>> iterator = mails.entrySet().iterator();
+			Object obj = methodBearer.returnStuff(mails);
+			if(obj!=null)
+			{
+				 System.out.println(((Entry<Mail, String>) obj).getKey().get("mailid"));
+			}
 			
-		    while (iterator.hasNext()) 
-		    {
-		        Map.Entry<Mail, String> pair = (Entry<Mail, String>)iterator.next();
-		        
-		        System.out.println(pair.getKey().get("mailid"));
-		    }
+//			Iterator<Entry<Mail, String>> iterator = mails.entrySet().iterator();
+//			
+//		    while (iterator.hasNext()) 
+//		    {
+//		        Map.Entry<Mail, String> pair = (Entry<Mail, String>)iterator.next();
+//		        
+//		        System.out.println(pair.getKey().get("mailid"));
+//		    }
 		}
 		public void modMail(String[] args)
 		{
@@ -97,6 +106,7 @@ public class Account implements Serializable
 		}
 		public void rmContact(int p_contact_id)
 		{
+			
 			int i = 0;
 			while (i < contacts.keySet().size()) 
 			{
@@ -159,9 +169,9 @@ public class Account implements Serializable
 			switch (p_ArgumentToGet) 
 			{
 				case "accountname": return accName;	
-				case "inboxservername": return inboxServer.getinboxServer();
+				case "inboxserver": return inboxServer.getinboxServer();
 				case "inboxserverport": return inboxServer.getPort();
-				case "outboxservername": return outboxServer.getOutboxServer();
+				case "outboxserver": return outboxServer.getOutboxServer();
 				case "outboxserverport": return outboxServer.getPort();
 			
 				default: return "Account oder Argument fehlerhaft";	
@@ -177,7 +187,7 @@ public class Account implements Serializable
 					accName = p_ValueToSet;
 				return p_ArgumentToChange+"="+p_ValueToSet;	
 				
-				case "inboxservername": 
+				case "inboxserver": 
 					inboxServer.setInboxServer(p_ValueToSet);
 				return p_ArgumentToChange+"="+p_ValueToSet;
 				
@@ -185,7 +195,7 @@ public class Account implements Serializable
 					inboxServer.setPort(Integer.parseInt(p_ValueToSet));
 				return p_ArgumentToChange+"="+p_ValueToSet;
 				
-				case "outboxServername":
+				case "outboxServer":
 					outboxServer.setOutboxServer(p_ValueToSet);
 				return p_ArgumentToChange+"="+p_ValueToSet;
 				
