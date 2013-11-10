@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;				
 import java.util.Date;
 
+import logic.ToItterate;
+
 @SuppressWarnings("serial")
 public class Mail implements Serializable
 {
