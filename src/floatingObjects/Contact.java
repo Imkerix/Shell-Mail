@@ -5,8 +5,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import logic.ToItterate;
+
 @SuppressWarnings("serial")
-public class Contact implements Serializable
+public class Contact implements Serializable, ToItterate
 {
 
 	private String name,familyname,email,tel,mobile,street,country;
