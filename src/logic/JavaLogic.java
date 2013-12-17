@@ -106,7 +106,7 @@ public class JavaLogic
 				}
 				else if(acc.get("accountname").equals(args[1]))
 				{
-						System.out.println(acc.get(args[2]));
+					System.out.println(acc.get(args[2]));
 				}
 			}
 		}
