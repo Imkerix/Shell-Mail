@@ -98,6 +98,7 @@ public class JavaLogic
 		private void getAccount(String[] args)
 		{
 			//Account := accountName attributToGet
+			System.out.println(accounts.size());
 			for (Account acc : accounts ) 
 			{
 				if(args.length == 1)
