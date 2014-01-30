@@ -9,7 +9,7 @@ import floatingObjects.Mail;
 public class Account implements Serializable
 {
 
-	private String accName;
+	private String name;
 	private InboxServer inboxServer;
 	private OutboxServer outboxServer;
 
@@ -18,7 +18,7 @@ public class Account implements Serializable
 
 	public Account(String p_accName, String p_inboxServer, int p_inboxServerPort, String p_outboxServer, int p_outboxServerPort)
 	{
-		accName = p_accName;
+		name = p_accName;
 		inboxServer = new InboxServer(p_inboxServer, p_inboxServerPort);
 		outboxServer = new OutboxServer(p_outboxServer, p_outboxServerPort);
 	}
@@ -53,7 +53,17 @@ public class Account implements Serializable
 		{
 			if ((int) mail.get("mail_id") == p_mail_id)
 			{
-				System.out.println(mail.get(p_ArgumentToGet));
+				if(p_ArgumentToGet.equals("attachments"))
+				{
+					for(String s : (ArrayList<String>) mail.get(p_ArgumentToGet))
+					{
+						System.out.println(s);
+					}
+				}
+				else
+				{
+					System.out.println(mail.get(p_ArgumentToGet));
+				}
 			}
 		}
 	}
@@ -167,7 +177,7 @@ public class Account implements Serializable
 		switch (p_ArgumentToGet)
 		{
 		case "name":
-			return accName;
+			return name;
 		case "inboxserver":
 			return inboxServer.getinboxServer();
 		case "inboxserverport":
@@ -189,7 +199,7 @@ public class Account implements Serializable
 		switch (p_ArgumentToChange)
 		{
 		case "name":
-			accName = p_ValueToSet;
+			name = p_ValueToSet;
 			break;
 		case "inboxserver":
 			inboxServer.setInboxServer(p_ValueToSet);
