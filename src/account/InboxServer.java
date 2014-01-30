@@ -13,24 +13,27 @@ public class InboxServer implements Serializable
 		inboxServer = p_inboxServer;
 		port = p_port;
 	}
-
-	public String getinboxServer() 
-	{
-		return inboxServer;
-	}
-
-	public void setInboxServer(String inboxServer) 
-	{
-		this.inboxServer = inboxServer;
-	}
-
-	public int getPort() 
-	{
-		return port;
-	}
 	
-	public void setPort(int port) 
-	{
-		this.port = port;
-	}
+	////Getter and Setter ////
+		public String getinboxServer() 
+		{
+			return inboxServer;
+		}
+	
+		public void setInboxServer(String inboxServer) 
+		{
+			this.inboxServer = inboxServer;
+		}
+	
+		public int getPort() 
+		{
+			return port;
+		}
+		
+		public void setPort(int port) 
+		{
+			this.port = port;
+		}
+	////Getter and Setter ////
+	
 }
