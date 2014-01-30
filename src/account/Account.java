@@ -1,7 +1,10 @@
 package account;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import floatingObjects.Contact;
 import floatingObjects.Mail;
 
@@ -59,6 +62,11 @@ public class Account implements Serializable
 					{
 						System.out.println(s);
 					}
+				}
+				if(p_ArgumentToGet.equals("date"))
+				{
+					SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                    System.out.println(formatter.format((Date)mail.get("date")));
 				}
 				else
 				{

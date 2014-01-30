@@ -46,7 +46,7 @@ public class Mail implements Serializable
             case "recipientemail": return recipientEmail;
             case "cc": return cc;
             case "bcc": return bcc;
-            case "date": return date.toString();
+            case "date": return date;
             case "mail_id": return mail_id;
             case "attachments": return attachments;
             case "folder": return folder;
