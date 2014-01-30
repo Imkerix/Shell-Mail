@@ -15,24 +15,23 @@ public class Mail implements Serializable
 	private String subject,content,senderEmail,recipientEmail,cc,bcc,folder;
 	private Date date = new Date();
 	private int mail_id;
-	private ArrayList<String> attachements = null;
+	private ArrayList<String> attachments = new ArrayList<String>();
 	
 	public Mail(int p_mail_id)
 	{
 		mail_id = p_mail_id;
 	}
 	
-	public void addAttachments(String p_allAtachments)
+	public void addAttachments(String[] p_allAtachments)
 	{
-		String[] splitedAttechments = p_allAtachments.split(" ");
-		for(String string : splitedAttechments)
+		for(String string : p_allAtachments)
 		{
-			attachements.add(string);
+			attachments.add(string);
 		}
 	}
-	public void replaceAttachments(String p_allAtachments)
+	public void replaceAttachments(String[] p_allAtachments)
 	{
-		attachements.clear();
+		attachments.clear();
 		addAttachments(p_allAtachments);
 	}
 	
@@ -49,7 +48,7 @@ public class Mail implements Serializable
             case "bcc": return bcc;
             case "date": return date.toString();
             case "mail_id": return mail_id;
-            case "attachements": return attachements;
+            case "attachments": return attachments;
             case "folder": return folder;
     
             default: return "Mail oder Argument fehlerhaft";        
@@ -81,8 +80,8 @@ public class Mail implements Serializable
                             e.printStackTrace();
                     } break;
             case "mail_id":mail_id = Integer.parseInt(p_value[0]); break;
-            case "attachements_add":addAttachments(p_value[0]); break;
-            case "attachements_replace":replaceAttachments(p_value[0]);break;
+            case "attachments_add":addAttachments(p_value); break;
+            case "attachments_replace":replaceAttachments(p_value);break;
             case "folder" :folder = p_value[0]; break;
         }
     }
