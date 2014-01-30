@@ -1,12 +1,7 @@
 package account;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import java.util.ArrayList;
 import floatingObjects.Contact;
 import floatingObjects.Mail;
 
@@ -14,187 +9,201 @@ import floatingObjects.Mail;
 public class Account implements Serializable
 {
 
-  private String accName;	
-  private InboxServer inboxServer;
-  private OutboxServer outboxServer;
-  
-  private HashMap<Mail, String> mails = new HashMap<Mail, String>();
-  private HashMap<Contact, String> contacts = new HashMap<Contact, String>();
-  
-  public Account(String p_accName, String p_inboxServer, String p_inboxServerPort, String p_outboxServer, String p_outboxServerPort)
-  {
-	  accName = p_accName;
-	  inboxServer = new InboxServer(p_inboxServer, Integer.parseInt(p_inboxServerPort));
-	  outboxServer = new OutboxServer(p_outboxServer, Integer.parseInt(p_outboxServerPort));
-  }
-	
+	private String accName;
+	private InboxServer inboxServer;
+	private OutboxServer outboxServer;
+
+	private ArrayList<Mail> mails = new ArrayList<Mail>();
+	private ArrayList<Contact> contacts = new ArrayList<Contact>();
+
+	public Account(String p_accName, String p_inboxServer, int p_inboxServerPort, String p_outboxServer, int p_outboxServerPort)
+	{
+		accName = p_accName;
+		inboxServer = new InboxServer(p_inboxServer, p_inboxServerPort);
+		outboxServer = new OutboxServer(p_outboxServer, p_outboxServerPort);
+	}
+
 	//// Begin : Mail ////
-		public void mkMail(int p_mail_id)
+	public void mkMail(int p_mail_id)
+	{ 
+		if(mail_id_used(p_mail_id))
 		{
-			mails.put(new Mail(p_mail_id), "drafts");
+			mails.add(new Mail(mails.size() + 1));
 		}
-		public void rmMail(int p_mail_id) 
+	}
+
+	public void rmMail(int p_mail_id)
+	{
+		int i = 0;
+		while (i < mails.size())
 		{
-			int i = 0;
-			while (i < mails.keySet().size()) 
+			if ((int) mails.get(i).get("mail_id") == p_mail_id)
 			{
-				if(Integer.parseInt((String) ((Mail) mails.keySet().toArray()[i]).get("mailid")) == p_mail_id)
-		        {
-					// no i++; here because a Hashmap shrinks if you delete stuff so i++; would make the code jump over one entry.
-		        	mails.remove(mails.keySet().toArray()[i]);
-		        }
-				else
-				{
-					// nothing is removed so i++;
-					i++;
-				}
+				mails.remove(i);
+			} else
+			{
+				i++;
 			}
 		}
-		public void getMail(int p_mail_id, String p_ArgumentToGet)
+	}
+
+	public void getMail(int p_mail_id, String p_ArgumentToGet)
+	{
+		for (Mail mail : mails)
 		{
-			Iterator<Entry<Mail, String>> iterator = mails.entrySet().iterator();
-			
-		    while (iterator.hasNext()) 
-		    {
-		        Map.Entry<Mail, String> pair = (Entry<Mail, String>)iterator.next();
-		        
-		        if(Integer.parseInt((String) pair.getKey().get("mailid")) == p_mail_id)
-		        {
-		        	System.out.println(pair.getKey().get(p_ArgumentToGet));
-		        }
-		    }
+			if ((int) mail.get("mail_id") == p_mail_id)
+			{
+				System.out.println(mail.get(p_ArgumentToGet));
+			}
 		}
-		public void getMail()
+	}
+
+	public void getMail()
+	{
+		for (Mail m : mails)
 		{
-			Iterator<Entry<Mail, String>> iterator = mails.entrySet().iterator();
-			
-		    while (iterator.hasNext()) 
-		    {
-		        Map.Entry<Mail, String> pair = (Entry<Mail, String>)iterator.next();
-		        
-		        System.out.println(pair.getKey().get("mailid"));
-		    }
+			System.out.println(m.get("mail_id"));
 		}
-		public void modMail(String[] args)
+	}
+
+	public void modMail(int p_mail_id, String p_setting, String[] strings)
+	{
+		for (Mail mail : mails)
 		{
-			Iterator<Entry<Mail, String>> iterator = mails.entrySet().iterator();
-			
-		    while (iterator.hasNext()) 
-		    {
-		        Map.Entry<Mail, String> pair = (Entry<Mail, String>)iterator.next();
-		        
-		        if(Integer.parseInt((String) pair.getKey().get("mailid")) == Integer.parseInt(args[2]))
-		        {
-		        	pair.getKey().set(args);
-		        }
-		    }
+			if ((int) mail.get("mail_id") == p_mail_id)
+			{
+				mail.set(p_setting, strings);
+			}
 		}
+	}
 	//// End : Mail //// 
 	//// Begin : Contact ////	
-		public void mkContact(int p_contact_id, String p_name, String p_familyname, String p_email, String p_tel, String p_mobile, String p_street,int p_housenumber,String p_country,Date p_birthday)
+	public void mkContact(int p_contact_id)
+	{ 
+		if(contact_id_used(p_contact_id))
 		{
-			contacts.put(new Contact(p_contact_id, p_name, p_familyname, p_email, p_tel, p_mobile, p_street, p_housenumber, p_country, p_birthday), "Personal adress book");
+			contacts.add(new Contact(p_contact_id));
 		}
-		public void rmContact(int p_contact_id)
+	}
+
+	public void rmContact(int p_contact_id)
+	{
+		int i = 0;
+		while (i < contacts.size())
 		{
-			int i = 0;
-			while (i < contacts.keySet().size()) 
+			if ((int) contacts.get(i).get("contact_id") == p_contact_id)
 			{
-				if((int)(((Contact) contacts.keySet().toArray()[i]).get("contactid")) == p_contact_id)
-		        {
-					// no i++; here because a Hashmap shrinks if you delete stuff so i++; would make the code jump over one entry.
-					contacts.remove(contacts.keySet().toArray()[i]);
-		        }
-				else
-				{
-					// nothing is removed so i++;
-					i++;
-				}
+				contacts.remove(i);
+			} else
+			{
+				i++;
 			}
 		}
-		public void getContact(int p_Contact_id, String p_ArgumentToGet) 
+	}
+
+	public void getContact()
+	{
+		for (Contact c : contacts)
 		{
-			Iterator<Entry<Contact, String>> iterator = contacts.entrySet().iterator();
-			
-		    while (iterator.hasNext()) 
-		    {
-		        Map.Entry<Contact, String> pair = (Entry<Contact, String>)iterator.next();
-		        
-		        if((int)(pair.getKey().get("contactid")) == p_Contact_id)
-		        {
-		        	System.out.println(pair.getKey().get(p_ArgumentToGet));
-		        }
-		    }
+			System.out.println(c.get("contact_id"));
 		}
-		public void getContact() 
+	}
+
+	public void getContact(int p_contact_id, String p_ArgumentToGet)
+	{
+		for (Contact contact : contacts)
 		{
-			Iterator<Entry<Contact, String>> iterator = contacts.entrySet().iterator();
-			
-		    while (iterator.hasNext()) 
-		    {
-		        Map.Entry<Contact, String> pair = (Entry<Contact, String>)iterator.next();
-		        
-		        	System.out.println(pair.getKey().get("contactid"));
-		    }
+			if ((int) contact.get("contact_id") == p_contact_id)
+			{
+				System.out.println(contact.get(p_ArgumentToGet));
+			}
 		}
-		public void modContact(String[] args)
+	}
+
+	public void modContact(int p_contact_id, String p_setting, String value)
+	{
+		for (Contact contact : contacts)
 		{
-			Iterator<Entry<Contact, String>> iterator = contacts.entrySet().iterator();
-			
-		    while (iterator.hasNext()) 
-		    {
-		        Map.Entry<Contact, String> pair = (Entry<Contact, String>)iterator.next();
-		        
-		        if((int)(pair.getKey().get("contactid")) == Integer.parseInt(args[2]))
-		        {
-		        	pair.getKey().set(args[3],args[4]);
-		        }
-		    }
+			if ((int) contact.get("contact_id") == p_contact_id)
+			{
+				contact.set(p_setting, value);
+			}
 		}
+	}
 	//// End : Contact //// 	
 
+	//// Begin : Helpers
+	public boolean mail_id_used(int mail_id)
+	{
+		for(Mail mail : mails)
+		{
+			if((int)mail.get("mail_id") == mail_id)
+			{
+				return false;
+				
+			}
+		}
+		return true;
+	}
+	
+	public boolean contact_id_used(int contact_id)
+	{
+		for(Contact contact : contacts)
+		{
+			if((int)contact.get("contact_id") == contact_id)
+			{
+				return false;
+				
+			}
+		}
+		return true;
+	}
+	//// End : Helpers
+	
+	
 	//// Begin : Ultimative getter ////
-		public Object get(String p_ArgumentToGet)
+	public Object get(String p_ArgumentToGet)
+	{
+		switch (p_ArgumentToGet)
 		{
-			switch (p_ArgumentToGet) 
-			{
-				case "accountname": return accName;	
-				case "inboxservername": return inboxServer.getinboxServer();
-				case "inboxserverport": return inboxServer.getPort();
-				case "outboxservername": return outboxServer.getOutboxServer();
-				case "outboxserverport": return outboxServer.getPort();
-			
-				default: return "Account oder Argument fehlerhaft";	
-			}
+		case "name":
+			return accName;
+		case "inboxserver":
+			return inboxServer.getinboxServer();
+		case "inboxserverport":
+			return inboxServer.getPort();
+		case "outboxserver":
+			return outboxServer.getOutboxServer();
+		case "outboxserverport":
+			return outboxServer.getPort();
+
+		default:
+			return "Account oder Argument fehlerhaft";
 		}
-	//// Begin : Ultimative getter ////	
+	}
+	//// End : Ultimative getter ////        
+
 	//// Begin : Ultimative setter ////
-		public Object set(String p_ArgumentToChange, String p_ValueToSet)
+	public void set(String p_ArgumentToChange, String p_ValueToSet)
+	{
+		switch (p_ArgumentToChange)
 		{
-			switch (p_ArgumentToChange) 
-			{
-				case "accountname": 
-					accName = p_ValueToSet;
-				return p_ArgumentToChange+"="+p_ValueToSet;	
-				
-				case "inboxservername": 
-					inboxServer.setInboxServer(p_ValueToSet);
-				return p_ArgumentToChange+"="+p_ValueToSet;
-				
-				case "inboxserverport": 
-					inboxServer.setPort(Integer.parseInt(p_ValueToSet));
-				return p_ArgumentToChange+"="+p_ValueToSet;
-				
-				case "outboxServername":
-					outboxServer.setOutboxServer(p_ValueToSet);
-				return p_ArgumentToChange+"="+p_ValueToSet;
-				
-				case "outboxServerport":
-					outboxServer.setPort(Integer.parseInt(p_ValueToSet));
-				return p_ArgumentToChange+"="+p_ValueToSet;
-			
-				default: return "Account oder Argument fehlerhaft";	
-			}
+		case "name":
+			accName = p_ValueToSet;
+			break;
+		case "inboxserver":
+			inboxServer.setInboxServer(p_ValueToSet);
+			break;
+		case "inboxserverport":
+			inboxServer.setPort(Integer.parseInt(p_ValueToSet));
+			break;
+		case "outboxServer":
+			outboxServer.setOutboxServer(p_ValueToSet);
+			break;
+		case "outboxServerport":
+			outboxServer.setPort(Integer.parseInt(p_ValueToSet));
+			break;
 		}
-	//// Begin : Ultimative setter ////		
+	}
+	//// End : Ultimative setter ////   
 }
