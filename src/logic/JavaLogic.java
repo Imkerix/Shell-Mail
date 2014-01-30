@@ -272,7 +272,7 @@ public class JavaLogic
 				{
 					if(account.get("name").equals(command.getString("name")))
 					{
-						account.mkMail(command.getInt("contact_id"));
+						account.mkContact(command.getInt("contact_id"));
 					}
 				}
 			}

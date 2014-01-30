@@ -50,6 +50,14 @@ public class Account implements Serializable
 		}
 	}
 
+	public void getMail()
+	{
+		for (Mail m : mails)
+		{
+			System.out.println(m.get("mail_id"));
+		}
+	}
+	
 	public void getMail(int p_mail_id, String p_ArgumentToGet)
 	{
 		for (Mail mail : mails)
@@ -63,7 +71,7 @@ public class Account implements Serializable
 						System.out.println(s);
 					}
 				}
-				if(p_ArgumentToGet.equals("date"))
+				else if(p_ArgumentToGet.equals("date"))
 				{
 					SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                     System.out.println(formatter.format((Date)mail.get("date")));
@@ -73,14 +81,6 @@ public class Account implements Serializable
 					System.out.println(mail.get(p_ArgumentToGet));
 				}
 			}
-		}
-	}
-
-	public void getMail()
-	{
-		for (Mail m : mails)
-		{
-			System.out.println(m.get("mail_id"));
 		}
 	}
 
@@ -133,7 +133,16 @@ public class Account implements Serializable
 		{
 			if ((int) contact.get("contact_id") == p_contact_id)
 			{
-				System.out.println(contact.get(p_ArgumentToGet));
+				if(p_ArgumentToGet.equals("birthday"))
+				{
+					SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+					Date d = (Date)contact.get("birthday");
+					System.out.println(formatter.format((Date)contact.get("birthday")));
+				}
+				else
+				{
+					System.out.println(contact.get(p_ArgumentToGet));
+				}
 			}
 		}
 	}
@@ -215,10 +224,10 @@ public class Account implements Serializable
 		case "inboxserverport":
 			inboxServer.setPort(Integer.parseInt(p_ValueToSet));
 			break;
-		case "outboxServer":
+		case "outboxserver":
 			outboxServer.setOutboxServer(p_ValueToSet);
 			break;
-		case "outboxServerport":
+		case "outboxserverport":
 			outboxServer.setPort(Integer.parseInt(p_ValueToSet));
 			break;
 		}

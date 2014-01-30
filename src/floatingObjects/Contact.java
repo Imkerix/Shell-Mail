@@ -11,7 +11,7 @@ public class Contact implements Serializable
 
 	private String name, familyname, email, tel, mobile, street, country;
 	private int housenumber;
-	private Date birthday;
+	private Date birthday = new Date();
 
 	private int contact_id;
 
@@ -43,12 +43,10 @@ public class Contact implements Serializable
 			return country;
 		case "birthday":
 			return birthday;
-		case "contactid":
+		case "contact_id":
 			return contact_id;
-
-		default:
-			return "Contact oder Argument fehlerhaft";
 		}
+		return null;
 	}
 	//// End : Ultimative getter ////
 
@@ -90,6 +88,7 @@ public class Contact implements Serializable
 			{
 				e.printStackTrace();
 			}
+			break;
 		case "contact_id":
 			contact_id = Integer.parseInt(p_Value);
 			break;
