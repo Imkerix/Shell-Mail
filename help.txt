@@ -8,85 +8,102 @@ Argument|example : short explaination
 
 Arguments:
 ##############
--mkAccount : creates an account.
-	accountname	|imkerix@live.de 	: The name of the account.
-	inboxserver	|pop3.live.com 		: The name of the inboxserver belonging to the account.
-	inboxserverport	|22 			: The port of the inboxserver belonging to the account.
-	outboxserver	|smtp.live.com 		: The name of the outboxserver belonging to the account.
-	outboxserverport|255			: The port of the outboxserver belonging to the account.
--------------
--rmAccount : deletes an account.
-	accountname	|imkerix@live.de	: The name of the account to delete.
--------------
--getAccount : Returns a property of an account. 
-	accountname	|imkerix@live.de 	: The name of the account you want to know a property from.
-	propertyname	|inboxserver		: The name of the property you want to know.
+-t --type : decides what you want to do with the following command
 
-	// If you want to know which accounts exist use getAccount without accountname and propertyname, like this:
-	// -getAccount
--------------
--modAccount : Modifies an account you can add or change settings and content with this command.
-	accountname	|imkerix@live.de 	: The account to modify.
-	propertyname	|outboxserverport 	: The property you want to change.
-	new value	|254			: The value you want to set.
-###############
-###############
--mkMail : creates a new mail.
-	accountname	|imkerix@live.de	: The account the new mail will be createt in.
-	mailid		|1			: The id of the new mail. (Be careful not to use the id more than once)
--------------
--rmMail : deletes a mail.
-	accountname	|imkerix@live.de 	: The account that contains the mail.
-	mailid		|1			: The id of the mail.
--------------
--modMail : modifies a mail.
-	accountname	|imkerix@live.de	: The account that contains the mail.
-	mailid		|1			: The id of the mail.
-	propertyname	|senderemail		: The property to change.
-	new value	|Imkerix@live.de	: The value to set for the property.
+	mkAccount : creates an account. needs the following sub commands
+		--name			|imkerix@live.de 	: The name of the account.
+		--inboxserver		|pop3.live.com 		: The name of the inboxserver belonging to the account.
+		--inboxserverport	|22 			: The port of the inboxserver belonging to the account.
+		--outboxserver		|smtp.live.com 		: The name of the outboxserver belonging to the account.
+		--outboxserverport	|255			: The port of the outboxserver belonging to the account.
+		//example: -t mkAccount --name imkerix@live.de --inboxserver pop3.live.com --inboxserverport 22 --outboxserver smtp.live.com --outboxserverport 255
+	-------------
+	rmAccount : deletes an account.
+		--name			|imkerix@live.de	: The name of the account to delete.
+		//example: -t rmAccount --name imkerix@live.de
+	-------------
+	getAccount : Returns a property of an account. 
+		--name			|imkerix@live.de 	: The name of the account you want to know a property from.
+		setting			|inboxserver		: The name of the property you want to know.
+		//example: -t getAccount --name imkerix@live.de content
 
-	// If you chose "content" as property the following text can have blank spaces. Like this:
-	// -modMail exampleAccount 1 content this is the example text that would be in the mail.
--------------
--getMail : Returns a property of a mail.
-	accountname	|imkerix@live.de	: The account that contains the mail.
-	mailid		|1			: The id of the mail.
-	propertyname	|senderemail		: The name of the property you want to know.
+		# If you want to know which accounts exist use getAccount without accountname and propertyname, like this:
+		//example -t getAccount
+	-------------
+	modAccount : Modifies an account you can add or change settings and content with this command.
+		--name			|imkerix@live.de 	: The account to modify.
+		setting			|outboxserverport 	: The property you want to change.
+		value			|254			: The value you want to set.
+		//example: -t modAccount --name imkerix@live.de inboxserver imapx.live.com
+	------------
+	# An account supports the following settings
+	# name, inboxserver, inboxserverport, outboxserver, outboxserverport
+	________________________________________________________________________________________________________
+	mkMail : creates a new mail.
+		--name			|imkerix@live.de	: The account the new mail will be createt in.
+		--mail_id		|1			: The id of the new mail. (Be careful not to use the id more than once)
+		//example: -t mkMail --name imkerix@live.de --mail_id 1
+	-------------
+	rmMail : deletes a mail.
+		--name			|imkerix@live.de 	: The account that contains the mail.
+		--mail_id		|1			: The id of the mail.
+		//example: -t rmMail --name imkerix@live.de --mail_id 1
+	-------------
+	getMail : Returns a property of a mail.
+		--name			|imkerix@live.de	: The account that contains the mail.
+		--mail_id		|1			: The id of the mail.
+		setting			|senderemail		: The name of the property you want to know.
+		//example: -t getMail --name imkerix@live.de --mail_id 1 content
 
-	// If you want to know which mails are in an account use this without id and property, like this:
-	// -getMail exampleAccount
-###############
-###############
--mkContact : creates a contact.
-	accountName 	|imkerix@live.de	: The name of the contact.
-	contactid	|1			: The id of the new contact. (Be careful not to use the id more than once)
-	name		|Erik			: The name of the account user. 
-	familyname	|Heinisch		: The familyname of the account user.
-	email 		|imkerix@live.de	: The email address of the account user.
-	tel		|06441/24936		: The telephonnumber of the account user.
-	mobile		|0345/349502794924	: The telephonnumber of the users mobile.
-	street		|karlstraße		: The street the account user lives in.
-	housenumber	|3 			: The housenumber of the users house.
-	country		|germany		: The nationality of the user.
-	birthday	|22-03-1995 "dd-MM-yyyy": The users birthday.
--------------
--rmContact : deletes a contact.
-	accountname	|imkerix@live.de 	: The account that contains the contact.
-	contactid	|1			: The id of the contact.
--------------
--modContact : modifies a contact.
-	accountname	|imkerix@live.de	: The account that contains the contact.
-	contactid	|1			: The id of the contact.
-	propertyname	|tel			: The property to change.
-	new value	|06441/24036		: The value to set for the property.
--------------
--getContact : Returns a property of a contact.
-	accountname	|imkerix@live.de	: The account that contains the contact.
-	contactid	|1			: The id of the contact.
-	propertyname	|familyname		: The name of the property you want to know.
+		# If you want to know which mails are in an account use this without id and property, like this:
+		//example: -t getMail --name imkerix@live
+	-------------
+	modMail : modifies a mail.
+		--name			|imkerix@live.de	: The account that contains the mail.
+		--mail_id		|1			: The id of the mail.
+		setting			|senderemail		: The property to change.
+		value			|Imkerix@live.de	: The value to set for the property.
+		//example: -t modMail --name Imkerix@live.de --mail_id 1 recipientemail erik.heinisch@aol.de
 
-	// If you want to know which contacts are in an account use this without id and property, like this:
-	// -getContact exampleAccount
+		# If you chose "content" or attachments as property the following text can have blank spaces. Like this:
+		//example: -t modMail --name Imkerix@live.de --mail_id 1 content This is what would be the content of the mail...
+		//example: -t modMail --name Imkerix@live.de --mail_id 1 attachments /home/erik/attachment1 /home/erik/attachment2
+	-------------
+	# A mail supports the following settings
+	# subject, content, senderemail, recipientemail, cc, bcc, folder, mail_id, attachments_add, attachment_replace, date
+	# date is used like this
+	//example: -t modMail --name Imkerix@live.de --mail_id 1 date 22-01-1995
+	________________________________________________________________________________________________________
+	mkContact : creates a contact.
+		--name 			|imkerix@live.de	: The name of the contact.
+		--contact_id		|1			: The id of the new contact. (Be careful not to use the id more than once)
+		//example: -t mkContact --name imkerix@live.de --contact_id 1
+	-------------
+	rmContact : deletes a contact.
+		--name			|imkerix@live.de 	: The account that contains the contact.
+		--contact_id		|1			: The id of the contact.
+		//example: -t rmContact --name imkerix@live.de --contact_id 1
+	-------------
+	getContact : Returns a property of a contact.
+		--name			|imkerix@live.de	: The account that contains the contact.
+		--contact_id		|1			: The id of the contact.
+		setting			|familyname		: The name of the property you want to know.
+		//example: -t getContact --name imkerix@live.de --contact_id 1 name
+
+		// If you want to know which contacts are in an account use this without id and property, like this:
+		// -t getContact --name imkerix@live.de
+	-------------
+	modContact : modifies a contact.
+		--name			|imkerix@live.de	: The account that contains the contact.
+		--contact_id		|1			: The id of the contact.
+		setting			|tel			: The property to change.
+		value	 		|06441/24036		: The value to set for the property.
+		//example: -t modContact --name imkerix@live.de --contact_id 1 name Heinisch
+	-------------
+	# A contact supports the following settings
+	# name, familyname, email, tel, mobile, street, country, housenumber, birthday
+	# birthday is used like this
+	//example: -t modContact --name Imkerix@live.de --contact_id 1 date 22-01-1995
 ###############
 ###############
--help : shows this beautiful page.
+-h --help : shows this beautiful page.
