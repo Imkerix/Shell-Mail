@@ -13,11 +13,15 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+
+import com.martiansoftware.jsap.FlaggedOption;
+import com.martiansoftware.jsap.JSAP;
+import com.martiansoftware.jsap.JSAPException;
+import com.martiansoftware.jsap.JSAPResult;
+import com.martiansoftware.jsap.Switch;
+import com.martiansoftware.jsap.UnflaggedOption;
+
 import account.Account;
 
 /**
@@ -29,30 +33,78 @@ public class JavaLogic
 	
 	private  String saveFile = "SaveFile";
 	private  ArrayList<Account> accounts = new ArrayList<Account>();
-
-	public JavaLogic(String[] args)
+	JSAP jsap = new JSAP();
+	private JSAPResult command;
+	
+	public JavaLogic(String[] args) throws JSAPException
 	{
+			// Account
+				FlaggedOption opt_name = new FlaggedOption("name").setStringParser(JSAP.STRING_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag('n').setLongFlag("name");
+				jsap.registerParameter(opt_name);
+				
+				FlaggedOption opt_inboxserver = new FlaggedOption("inboxserver").setStringParser(JSAP.STRING_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag(JSAP.NO_SHORTFLAG).setLongFlag("inboxserver");
+				jsap.registerParameter(opt_inboxserver);
+				FlaggedOption opt_inboxserverport = new FlaggedOption("inboxserverport").setStringParser(JSAP.INTEGER_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag(JSAP.NO_SHORTFLAG).setLongFlag("inboxserverport");
+				jsap.registerParameter(opt_inboxserverport);
+				
+				FlaggedOption opt_outboxserver = new FlaggedOption("outboxserver").setStringParser(JSAP.STRING_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag(JSAP.NO_SHORTFLAG).setLongFlag("outboxserver");
+				jsap.registerParameter(opt_outboxserver);
+				FlaggedOption opt_outboxserverport = new FlaggedOption("outboxserverport").setStringParser(JSAP.INTEGER_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag(JSAP.NO_SHORTFLAG).setLongFlag("outboxserverport");
+				jsap.registerParameter(opt_outboxserverport);
+			// Account
+			
+			// Mail 
+				FlaggedOption opt_mail_id = new FlaggedOption("mail_id").setStringParser(JSAP.INTEGER_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag(JSAP.NO_SHORTFLAG).setLongFlag("mail_id");
+				jsap.registerParameter(opt_mail_id);
+			// Mail
+			
+			// Contact
+				FlaggedOption opt_contact_id = new FlaggedOption("contact_id").setStringParser(JSAP.INTEGER_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag(JSAP.NO_SHORTFLAG).setLongFlag("contact_id");
+				jsap.registerParameter(opt_contact_id);
+			// Contact
+				
+			// Contact
+				Switch sw_help = new Switch("help").setShortFlag('h').setLongFlag("help");
+				jsap.registerParameter(sw_help);
+			// Contact
+			
+			FlaggedOption opt_type = new FlaggedOption("type").setStringParser(JSAP.STRING_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(true).setShortFlag('t').setLongFlag("type");
+			jsap.registerParameter(opt_type);
+			
+			UnflaggedOption ufopt_setting = new UnflaggedOption("setting").setStringParser(JSAP.STRING_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false);
+			jsap.registerParameter(ufopt_setting);
+			
+			UnflaggedOption ufopt_value = new UnflaggedOption("value").setDefault(JSAP.NO_DEFAULT).setRequired(false).setGreedy(true);
+			jsap.registerParameter(ufopt_value);	
+				
+			command = jsap.parse(args);   // contains one command
+			
+		
 		deserialize(saveFile); 
-			if(args.length>0 && (accounts.size()>0 || args[0].equals("-mkAccount") || args[0].equals("-help")))
+			if(command.getBoolean("help"))
+			{	
+				printHelp();
+			}
+			if(args.length>0 && (accounts.size()>0 || command.contains("type") && command.getString("type").equals("mkAccount") || command.contains("type") && command.getString("type").equals("help")))
 			{
-					switch (args[0])
+					switch (command.getString("type"))
 					{
-					case "-mkAccount":	 mkAccount(args);	break;
-					case "-rmAccount":	 rmAccount(args);	break;
-					case "-modAccount":	 modAccount(args);	break;
-					case "-getAccount":	 getAccount(args);	break;
+					case "mkAccount":	 mkAccount();	break;
+					case "rmAccount":	 rmAccount();	break;
+					case "modAccount":	 modAccount();	break;
+					case "getAccount":	 getAccount();	break;
 					
-					case "-mkMail":		 mkMail(args);		break;
-					case "-rmMail":		 rmMail(args);		break;
-					case "-modMail":	 modMail(args);	break;
-					case "-getMail":	 getMail(args);	break;
+					case "mkMail":		 mkMail();		break;
+					case "rmMail":		 rmMail();		break;
+					case "modMail":	 	 modMail();		break;
+					case "getMail":	 	 getMail();		break;
 					
-					case "-mkContact":	 mkContact(args);	break;
-					case "-rmContact":	 rmContact(args); 	break;
-					case "-modContact":	 modContact(args);	break;
-					case "-getContact":	 getContact(args);	break;
+					case "mkContact":	 mkContact();	break;
+					case "rmContact":	 rmContact(); 	break;
+					case "modContact":	 modContact();	break;
+					case "getContact":	 getContact();	break;
 					
-					case "-help":		 printHelp(); 		break;
+					case "help":		 printHelp(); 		break;
 					}
 			}
 			else if (args.length>0)
@@ -68,173 +120,215 @@ public class JavaLogic
 	}
 
 	//// Begin : Account
-		private void mkAccount(String[] args) 
+		private void mkAccount() 
 		{
 			//Account := accountName inboxServer inboxServerPort outboxServer outboxServerPort
-			accounts.add(new Account(args[1],args[2],args[3],args[4],args[5]));
+			if(command.contains("name") && command.contains("inboxserver") && command.contains("inboxserverport") && command.contains("outboxserver") && command.contains("outboxserverport"))
+			{
+				accounts.add(new Account(command.getString("name"), command.getString("inboxserver"), command.getInt("inboxserverport"), command.getString("outboxserver"), command.getInt("outboxserverport")));
+			}
+			else
+			{
+				System.err.println("Missing arguments usage : -t mkAccount --name 'accountname' --inboxserver 'pop3.servername.com' --inboxserverport '22' --outboxserver 'pop3.servername.com' --outboxserverport '255'");
+			}
 		}
-		private void rmAccount(String[] args) 
+		private void rmAccount() 
 		{
 			//Account := accountName
-			int i = 0;
-			while (i < accounts.size()) 
+			if(command.contains("name"))
 			{
-				if(accounts.get(i).get("accountname").equals(args[1]))
+				int i = 0;
+				while(i<accounts.size())
 				{
-					i++;
-					File oldAccount = new File (saveFile+File.separator+accounts.get(i-1).get("accountname"));
-					if(oldAccount.exists())
+					if(accounts.get(i).get("name").equals(command.getString("name")))
 					{
-						oldAccount.delete();
+						accounts.remove(i); // no i++ because if I remove an element the array will shrink and I would leave out an element. 
 					}
-					accounts.remove(i-1);
-				}
-				else
-				{
-					i++;
+					else
+					{
+						i++;
+					}
 				}
 			}
+			else
+			{
+				System.err.println("Missing arguments usage : -t rmAccount --name 'accountname'");
+			}
 		}
-		private void getAccount(String[] args)
+		private void getAccount()
 		{
 			//Account := accountName attributToGet
-			System.out.println(accounts.size());
-			for (Account acc : accounts ) 
+			if(command.contains("name") && command.contains("setting"))
 			{
-				if(args.length == 1)
+				for(Account a : accounts)
 				{
-					System.out.println(acc.get("accountname"));
+					if(a.get("name").equals(command.getString("name")))
+					{
+						System.out.println(a.get(command.getString("setting")));
+					}
 				}
-				else if(acc.get("accountname").equals(args[1]))
+			}
+			else
+			{
+				for(Account a : accounts)
 				{
-					System.out.println(acc.get(args[2]));
+					System.out.println(a.get("name"));
 				}
 			}
 		}
-		private void modAccount(String[] args)
+		private void modAccount()
 		{
 			//Account := accountName attributToSet Value
-			for (Account acc : accounts ) 
+			if(command.contains("name") && command.contains("setting") && command.contains("value"))
 			{
-				if(acc.get("accountname").equals(args[1]))
+				for(Account a : accounts)
 				{
-					acc.set(args[2], args[3]);
+					if(a.get("name").equals(command.getString("name")))
+					{
+						a.set(command.getString("setting"),command.getString("value"));
+					}
 				}
 			}
 		}
 	//// End : Account
 	////Begin : Mail
-		private void mkMail(String[] args) 
+		private void mkMail() 
 		{
-			//Mail := accountName mail_id attributToSet Value
-			for (Account acc : accounts) 
+			//Mail := accountName mail_id
+			if(command.contains("name") && command.contains("mail_id"))
 			{
-				if(acc.get("accountname").equals(args[1]))
+				for(Account account : accounts)
 				{
-					acc.mkMail(Integer.parseInt(args[2]));
+					if(account.get("name").equals(command.getString("name")))
+					{
+						account.mkMail(command.getInt("mail_id"));
+					}
 				}
 			}
 		}
-		private void rmMail(String[] args) 
+		private void rmMail() 
 		{
 			//Mail := accountname mail_id
-			for (Account acc : accounts) 
+			if(command.contains("name") && command.contains("mail_id"))
 			{
-				if(acc.get("accountname").equals(args[1]))
+				for(Account account : accounts)
 				{
-					acc.rmMail(Integer.parseInt(args[2]));
-				}
+					if(account.get("name").equals(command.getString("name")))
+					{
+						account.rmMail(command.getInt("mail_id"));
+					}
+				}	
 			}
 		}
-		private void getMail(String[] args) 
+		private void getMail() 
 		{
 			//Mail := accountname mail_id attributToGet
-			for (Account acc : accounts) 
+			if(command.contains("name"))
 			{
-				if(acc.get("accountname").equals(args[1]))
+				if(command.contains("mail_id") && command.contains("setting"))
 				{
-					if(args.length == 2)
+					for(Account account : accounts)
 					{
-						acc.getMail();
+						if(account.get("name").equals(command.getString("name")))
+						{
+							account.getMail(command.getInt("mail_id"),command.getString("setting"));
+						}
 					}
-					else
+				}
+				else
+				{
+					for(Account account : accounts)
 					{
-						acc.getMail(Integer.parseInt(args[2]), args[3]);
+						if(account.get("name").equals(command.getString("name")))
+						{
+							account.getMail();
+						}
 					}
 				}
 			}
 		}
-		private void modMail(String[] args) 
+		private void modMail() 
 		{
-			//Mail := accountname mail_id
-			for (Account acc : accounts) 
+			//Mail := accountname mail_id setting value
+			if(command.contains("name") && command.contains("mail_id") && command.contains("setting") && command.contains("value"))
 			{
-				if(acc.get("accountname").equals(args[1]))
+				for(Account account : accounts)
 				{
-					acc.modMail(args);
+					if(account.get("name").equals(command.getString("name")))
+					{
+						account.modMail(command.getInt("mail_id"),command.getString("setting"),command.getStringArray("value"));
+					}
 				}
 			}
 		}
 	//// End : Mail
 	////Begin : Contact
-		private void mkContact(String[] args)  
+		private void mkContact()  
 		{
-			//Contact := accountName contact_id name familyname email tel mobile street housenumber country birthday_like:"dd-MM-yyyy"
-			for (Account acc : accounts) 
+			//Contact := accountName contact_id
+			if(command.contains("name") && command.contains("contact_id"))
 			{
-				if(acc.get("accountname").equals(args[1]))
+				for(Account account : accounts)
 				{
-					try 
+					if(account.get("name").equals(command.getString("name")))
 					{
-						String dateString = args[11];
-						Date date = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).parse(dateString);
-						acc.mkContact(Integer.parseInt(args[2]), args[3], args[4], args[5], args[6], args[7],args[8], Integer.parseInt(args[9]), args[10], date);
-					}
-					catch (ParseException e) 
-					{
-						e.printStackTrace();
+						account.mkMail(command.getInt("mail_id"));
 					}
 				}
 			}
 		}
-		private void rmContact(String[] args) 
+		private void rmContact() 
 		{
 			//Contact := accountname contact_id
-			for (Account acc : accounts) 
+			if(command.contains("name") && command.contains("contact_id"))
 			{
-				if(acc.get("accountname").equals(args[1]))
+				for(Account account : accounts)
 				{
-					acc.rmContact(Integer.parseInt(args[2]));
-				}
+					if(account.get("name").equals(command.getString("name")))
+					{
+						account.rmContact(command.getInt("contact_id"));  
+					}
+				}	
 			}
 		}
-		private void getContact(String[] args)
+		private void getContact()
 		{
 			//Contact := accountname contact_id attributToGet
-			for (Account acc : accounts) 
+			if(command.contains("name"))
 			{
-				
-				if(acc.get("accountname").equals(args[1]))
+				if(command.contains("contact_id") && command.contains("setting"))
 				{
-					if(args.length == 2)
+					for(Account account : accounts)
 					{
-						acc.getContact();
+						if(account.get("name").equals(command.getString("name")))
+						{
+							account.getContact(command.getInt("contact_id"),command.getString("setting"));
+						}
 					}
-					else
+				}
+				else
+				{
+					for(Account account : accounts)
 					{
-						acc.getContact(Integer.parseInt(args[2]), args[3]);
+						if(account.get("name").equals(command.getString("name")))
+						{
+							account.getContact();
+						}
 					}
 				}
 			}
 		}
-		private void modContact(String[] args)
+		private void modContact()
 		{
 			//Contact := accountname contact_id
-			for (Account acc : accounts) 
+			if(command.contains("name") && command.contains("contact_id") && command.contains("setting") && command.contains("value"))
 			{
-				if(acc.get("accountname").equals(args[1]))
+				for(Account account : accounts)
 				{
-					acc.modContact(args);
+					if(account.get("name").equals(command.getString("name")))
+					{
+						account.modContact(command.getInt("contact_id"),command.getString("setting"),command.getString("value"));
+					}
 				}
 			}
 		}
@@ -245,8 +339,6 @@ public class JavaLogic
 		try 
 		{
 			BufferedReader br = new BufferedReader(new FileReader("help.txt"));
-	    
-			
 			for(String line = br.readLine(); line!=null; line=br.readLine())
 			{
 				System.out.println(line);
@@ -273,7 +365,7 @@ public class JavaLogic
 		    // End : saveDirectory //
 		    for(Account acc : accounts)
 		    {
-		    	fos = new FileOutputStream(p_saveFilePath+File.separator+acc.get("accountname"), false);
+		    	fos = new FileOutputStream(p_saveFilePath+File.separator+acc.get("name"), false);
 		    	ObjectOutputStream o = new ObjectOutputStream( fos );
 		    	o.writeObject(acc);
 		    	fos.close();
