@@ -14,24 +14,26 @@ public class OutboxServer implements Serializable
 		port = p_port;
 	}
 
-	public String getOutboxServer() 
-	{
-		return outboxServer;
-	}
+	////Getter and Setter ////
+		public String getOutboxServer() 
+		{
+			return outboxServer;
+		}
+		
+		public void setOutboxServer(String outboxServer) 
+		{
+			this.outboxServer = outboxServer;
+		}
 	
-	public void setOutboxServer(String outboxServer) 
-	{
-		this.outboxServer = outboxServer;
-	}
-
-	public int getPort() 
-	{
-		return port;
-	}
-
-	public void setPort(int port) 
-	{
-		this.port = port;
-	}
+		public int getPort() 
+		{
+			return port;
+		}
+	
+		public void setPort(int port) 
+		{
+			this.port = port;
+		}
+	////Getter and Setter ////
 	
 }
