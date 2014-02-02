@@ -170,6 +170,7 @@ public class JavaLogic
 			}
 			else
 			{
+				System.out.println(accounts.size());
 				for(Account a : accounts)
 				{
 					System.out.println(a.get("name"));
