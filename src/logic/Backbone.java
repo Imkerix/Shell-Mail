@@ -25,22 +25,22 @@ import com.martiansoftware.jsap.UnflaggedOption;
 import account.Account;
 
 /**
- * The main parser for the users commands, apply´s the changes to the saved {@link account.Account}´s and stores them for further usage.
+ * The main parser for the users commands, apply&#180;s the changes to the saved {@link account.Account}&#180;s and stores them for further usage.
  * @author erik heinisch 
  * 
  */
 public class Backbone
 {
     /**
-     * A {@link java.lang.String} representing a path to the folder where the {@link account.Account}´s are saved loaded from.
+     * A {@link java.lang.String} representing a path to the folder where the {@link account.Account}&#180;s are saved loaded from.
      */
 	private  String saveFile = "SaveFile";
     /**
-     * A {@link java.util.ArrayList} containing all {@link account.Account}´s that exist in this {@link logic.Backbone}.
+     * A {@link java.util.ArrayList} containing all {@link account.Account}&#180;s that exist in this {@link logic.Backbone}.
      */
 	private  ArrayList<Account> accounts = new ArrayList<Account>();
     /**
-     * The Java-Simpel-Argument-Parser {@link com.martiansoftware.jsap.JSAP} determinate´s the users divine will.
+     * The Java-Simpel-Argument-Parser {@link com.martiansoftware.jsap.JSAP} determinate&#180;s the users divine will.
      */
 	private JSAP jsap;
     /**
@@ -49,11 +49,11 @@ public class Backbone
 	private JSAPResult command;
 
     /**
-     * Constructs a new {@link logic.Backbone} initializes the {@link com.martiansoftware.jsap.JSAP} and creates several {@link com.martiansoftware.jsap.FlaggedOption}´s to react on in the later programm.
+     * Constructs a new {@link logic.Backbone} initializes the {@link com.martiansoftware.jsap.JSAP} and creates several {@link com.martiansoftware.jsap.FlaggedOption}&#180;s to react on in the later programm.
      * As next step {@see args} is parsed to a {@link com.martiansoftware.jsap.JSAPResult} by the {@link com.martiansoftware.jsap.JSAP}. This {@link com.martiansoftware.jsap.JSAPResult} can be used later to
      * determinate the users desires.
-     * All old {@link account.Account}´s are deserialized and the users command is executed on the accounts. After the command was processed all {@link account.Account}´s are serialized again.
-     * @param args The users command in {@link java.lang.String}´s
+     * All old {@link account.Account}&#180;s are deserialized and the users command is executed on the accounts. After the command was processed all {@link account.Account}&#180;s are serialized again.
+     * @param args The users command in {@link java.lang.String}&#180;s
      * @throws JSAPException Parsing problems by the {@link com.martiansoftware.jsap.JSAP}.
      */
 	public Backbone(String[] args) throws JSAPException
@@ -183,7 +183,7 @@ public class Backbone
 			}
 		}
         /**
-         * Returns either all Account_id´s after printing their lenght '3 My_mail_address erik.heinisch@aol.de Eriks_drittMail' or a special property belonging to a specified {@link account.Account}.
+         * Returns either all Account_id&#180;s after printing their lenght '3 My_mail_address erik.heinisch@aol.de Eriks_drittMail' or a special property belonging to a specified {@link account.Account}.
          * The reaction of this method is directly dependent of the arguments given to the {@link com.martiansoftware.jsap.JSAP}.
          */
 		private void getAccount()
@@ -262,7 +262,7 @@ public class Backbone
 			}
 		}
         /**
-         * Returns either all Mail_id´s of all {@link account.Account}´s or a special property belonging to a specified {@link floatingObjects.Mail} of a specified {@link account.Account}.
+         * Returns either all Mail_id&#180;s of all {@link account.Account}&#180;s or a special property belonging to a specified {@link floatingObjects.Mail} of a specified {@link account.Account}.
          * The reaction of this method is directly dependent of the arguments given to the {@link com.martiansoftware.jsap.JSAP}.
          */
 		private void getMail() 
@@ -346,7 +346,7 @@ public class Backbone
 			}
 		}
         /**
-         * Returns either all Contact_id´s of all {@link account.Account}´s or a special property belonging to a specified {@link floatingObjects.Contact} of a specified {@link account.Account}.
+         * Returns either all Contact_id&#180;s of all {@link account.Account}&#180;s or a special property belonging to a specified {@link floatingObjects.Contact} of a specified {@link account.Account}.
          * The reaction of this method is directly dependent of the arguments given to the {@link com.martiansoftware.jsap.JSAP}.
          */
 		private void getContact()
@@ -414,9 +414,9 @@ public class Backbone
 
 //// Begin : Serialize and Deserialize ////
     /**
-     * Serailizes all {@link account.Account}´s in the {@link java.util.ArrayList} {@see accounts} to the directory given by the parameter.
+     * Serailizes all {@link account.Account}&#180;s in the {@link java.util.ArrayList} {@see accounts} to the directory given by the parameter.
      * To prevent file duplication all files in the directory are deleted with the {@see deleteFolder(File)} method before they are written.
-     * @param p_saveFilePath The directory in which to save the {@link account.Account}´s.
+     * @param p_saveFilePath The directory in which to save the {@link account.Account}&#180;s.
      */
 	public void serialize(String p_saveFilePath)
 	{
@@ -446,7 +446,7 @@ public class Backbone
 	}
 	// Begin : Help method to clean up folder in serialize
     /**
-     * Deletes all {@link java.io.File}´s in the directory given by the parameter.
+     * Deletes all {@link java.io.File}&#180;s in the directory given by the parameter.
      * @param p_saveFolder The directory to clean up.
      */
 	public void deleteFolder(File p_saveFolder) 
@@ -469,8 +469,8 @@ public class Backbone
 	}
 	// End : Help method to clean up folder in serialize
     /**
-     * Deserializes all {@link account.Account}´s found in the directory represented by the parameter, and adds them to the {@see accounts} list.
-     * @param p_readFilePath The path to search for {@link account.Account}´s
+     * Deserializes all {@link account.Account}&#180;s found in the directory represented by the parameter, and adds them to the {@see accounts} list.
+     * @param p_readFilePath The path to search for {@link account.Account}&#180;s
      */
 	public void deserialize(String p_readFilePath)
 	{

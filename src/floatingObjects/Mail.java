@@ -46,7 +46,7 @@ public class Mail implements Serializable
      */
 	private Date date = new Date();
     /**
-     * A id to identify this {@link floatingObjects.Mail}.
+     * A id to identify this {@link floatingObjects.MailF}.
      */
 	private int mail_id;
     /**
@@ -64,7 +64,7 @@ public class Mail implements Serializable
 	}
 
     /**
-     * Adds all new paths in form of {@link java.lang.String}´s to the {@see attachments}.
+     * Adds all new paths in form of {@link java.lang.String}&#180;s to the {@see attachments}.
      * @param p_allAtachments The new attachments paths.
      */
 	public void addAttachments(String[] p_allAtachments)

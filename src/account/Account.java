@@ -85,7 +85,7 @@ public class Account implements Serializable
 	}
 
     /**
-     * Returns the id´s of all {@link floatingObjects.Mail} objects {@see Account.mails} contains.
+     * Returns the id&#180;s of all {@link floatingObjects.Mail} objects {@see Account.mails} contains.
      */
     public void getMail()
 	{
@@ -177,7 +177,7 @@ public class Account implements Serializable
 	}
 
     /**
-     * Returns the id´s of all {@link floatingObjects.Contact} objects {@see Account.contacts} contains.
+     * Returns the id&#180;s of all {@link floatingObjects.Contact} objects {@see Account.contacts} contains.
      */
 	public void getContact()
 	{
