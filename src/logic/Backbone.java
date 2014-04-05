@@ -25,19 +25,40 @@ import com.martiansoftware.jsap.UnflaggedOption;
 import account.Account;
 
 /**
+ * The main parser for the users commands, apply´s the changes to the saved {@link account.Account}´s and stores them for further usage.
  * @author erik heinisch 
  * 
  */
-public class JavaLogic 
+public class Backbone
 {
-	
+    /**
+     * A {@link java.lang.String} representing a path to the folder where the {@link account.Account}´s are saved loaded from.
+     */
 	private  String saveFile = "SaveFile";
+    /**
+     * A {@link java.util.ArrayList} containing all {@link account.Account}´s that exist in this {@link logic.Backbone}.
+     */
 	private  ArrayList<Account> accounts = new ArrayList<Account>();
-	JSAP jsap = new JSAP();
+    /**
+     * The Java-Simpel-Argument-Parser {@link com.martiansoftware.jsap.JSAP} determinate´s the users divine will.
+     */
+	private JSAP jsap;
+    /**
+     * The parsing result created by the {@link com.martiansoftware.jsap.JSAP}.
+     */
 	private JSAPResult command;
-	
-	public JavaLogic(String[] args) throws JSAPException
+
+    /**
+     * Constructs a new {@link logic.Backbone} initializes the {@link com.martiansoftware.jsap.JSAP} and creates several {@link com.martiansoftware.jsap.FlaggedOption}´s to react on in the later programm.
+     * As next step {@see args} is parsed to a {@link com.martiansoftware.jsap.JSAPResult} by the {@link com.martiansoftware.jsap.JSAP}. This {@link com.martiansoftware.jsap.JSAPResult} can be used later to
+     * determinate the users desires.
+     * All old {@link account.Account}´s are deserialized and the users command is executed on the accounts. After the command was processed all {@link account.Account}´s are serialized again.
+     * @param args The users command in {@link java.lang.String}´s
+     * @throws JSAPException Parsing problems by the {@link com.martiansoftware.jsap.JSAP}.
+     */
+	public Backbone(String[] args) throws JSAPException
 	{
+        jsap = new JSAP();
 			// Account
 				FlaggedOption opt_name = new FlaggedOption("name").setStringParser(JSAP.STRING_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag('n').setLongFlag("name");
 				jsap.registerParameter(opt_name);
@@ -120,6 +141,9 @@ public class JavaLogic
 	}
 
 	//// Begin : Account
+        /**
+         * Creates a new {@link floatingObjects.Contact} based on the parameters given by the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void mkAccount() 
 		{
 			//Account := accountName inboxServer inboxServerPort outboxServer outboxServerPort
@@ -132,6 +156,9 @@ public class JavaLogic
 				System.err.println("Missing arguments usage : -t mkAccount --name 'accountname' --inboxserver 'pop3.servername.com' --inboxserverport '22' --outboxserver 'pop3.servername.com' --outboxserverport '255'");
 			}
 		}
+        /**
+         * Removes a {@link account.Account} based on the parameters given by the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void rmAccount() 
 		{
 			//Account := accountName
@@ -155,6 +182,10 @@ public class JavaLogic
 				System.err.println("Missing arguments usage : -t rmAccount --name 'accountname'");
 			}
 		}
+        /**
+         * Returns either all Account_id´s after printing their lenght '3 My_mail_address erik.heinisch@aol.de Eriks_drittMail' or a special property belonging to a specified {@link account.Account}.
+         * The reaction of this method is directly dependent of the arguments given to the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void getAccount()
 		{
 			//Account := accountName attributToGet
@@ -177,6 +208,9 @@ public class JavaLogic
 				}
 			}
 		}
+        /**
+         * Modifies the {@link account.Account} with the arguments extracted by the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void modAccount()
 		{
 			//Account := accountName attributToSet Value
@@ -193,6 +227,9 @@ public class JavaLogic
 		}
 	//// End : Account
 	////Begin : Mail
+        /**
+         * Creates a new {@link floatingObjects.Contact} based on the parameters given by the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void mkMail() 
 		{
 			//Mail := accountName mail_id
@@ -207,6 +244,9 @@ public class JavaLogic
 				}
 			}
 		}
+        /**
+         * Removes a {@link floatingObjects.Mail} based on the parameters given by the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void rmMail() 
 		{
 			//Mail := accountname mail_id
@@ -221,6 +261,10 @@ public class JavaLogic
 				}	
 			}
 		}
+        /**
+         * Returns either all Mail_id´s of all {@link account.Account}´s or a special property belonging to a specified {@link floatingObjects.Mail} of a specified {@link account.Account}.
+         * The reaction of this method is directly dependent of the arguments given to the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void getMail() 
 		{
 			//Mail := accountname mail_id attributToGet
@@ -248,6 +292,9 @@ public class JavaLogic
 				}
 			}
 		}
+        /**
+         * Modifies the {@link floatingObjects.Mail} with the arguments extracted by the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void modMail() 
 		{
 			//Mail := accountname mail_id setting value
@@ -264,6 +311,9 @@ public class JavaLogic
 		}
 	//// End : Mail
 	////Begin : Contact
+        /**
+         * Creates a new {@link floatingObjects.Contact} based on the parameters given by the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void mkContact()  
 		{
 			//Contact := accountName contact_id
@@ -278,6 +328,9 @@ public class JavaLogic
 				}
 			}
 		}
+        /**
+         * Removes a {@link floatingObjects.Contact} based on the parameters given by the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void rmContact() 
 		{
 			//Contact := accountname contact_id
@@ -292,6 +345,10 @@ public class JavaLogic
 				}	
 			}
 		}
+        /**
+         * Returns either all Contact_id´s of all {@link account.Account}´s or a special property belonging to a specified {@link floatingObjects.Contact} of a specified {@link account.Account}.
+         * The reaction of this method is directly dependent of the arguments given to the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void getContact()
 		{
 			//Contact := accountname contact_id attributToGet
@@ -319,6 +376,9 @@ public class JavaLogic
 				}
 			}
 		}
+        /**
+         * Modifies the {@link floatingObjects.Contact} with the arguments extracted by the {@link com.martiansoftware.jsap.JSAP}.
+         */
 		private void modContact()
 		{
 			//Contact := accountname contact_id
@@ -335,7 +395,10 @@ public class JavaLogic
 		}
 	//// End : Contact
 
-	private void printHelp() 
+    /**
+     * Prints the {@link java.io.File} {@see help.txt}.
+     */
+	private void printHelp()
 	{
 		try 
 		{
@@ -350,6 +413,11 @@ public class JavaLogic
 	}
 
 //// Begin : Serialize and Deserialize ////
+    /**
+     * Serailizes all {@link account.Account}´s in the {@link java.util.ArrayList} {@see accounts} to the directory given by the parameter.
+     * To prevent file duplication all files in the directory are deleted with the {@see deleteFolder(File)} method before they are written.
+     * @param p_saveFilePath The directory in which to save the {@link account.Account}´s.
+     */
 	public void serialize(String p_saveFilePath)
 	{
 		  OutputStream fos = null;
@@ -377,6 +445,10 @@ public class JavaLogic
 		
 	}
 	// Begin : Help method to clean up folder in serialize
+    /**
+     * Deletes all {@link java.io.File}´s in the directory given by the parameter.
+     * @param p_saveFolder The directory to clean up.
+     */
 	public void deleteFolder(File p_saveFolder) 
 	{
 		File[] accountFiles = p_saveFolder.listFiles();
@@ -396,6 +468,10 @@ public class JavaLogic
 		
 	}
 	// End : Help method to clean up folder in serialize
+    /**
+     * Deserializes all {@link account.Account}´s found in the directory represented by the parameter, and adds them to the {@see accounts} list.
+     * @param p_readFilePath The path to search for {@link account.Account}´s
+     */
 	public void deserialize(String p_readFilePath)
 	{
 		// Begin : Preparation //
@@ -424,7 +500,10 @@ public class JavaLogic
     	catch ( IOException|ClassNotFoundException e ) { System.err.println( e ); }
 	}
 //// End : Serialize and Deserialize ////
-	
+
+    /**
+     * Prints an error message, if the programm is started with a parameter that requires at least one account, but there is none.
+     */
 	private void noAccounts() 
 	{
 		System.err.println("Es gibt keine Accounts im dafür vorgesehenen ordner");

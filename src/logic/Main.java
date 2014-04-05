@@ -7,6 +7,6 @@ public class Main
 	public static void main(String[] args) throws JSAPException
 	{
 		@SuppressWarnings("unused")
-		JavaLogic mylogic = new JavaLogic(args);
+        Backbone mylogic = new Backbone(args);
 	}
 }

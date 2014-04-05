@@ -6,22 +6,67 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;				
 import java.util.Date;
 
-import com.sun.org.apache.regexp.internal.recompile;
-
 @SuppressWarnings("serial")
+/**
+ * Represents a Mail.
+ */
 public class Mail implements Serializable
 {
 
-	private String subject,content,senderEmail,recipientEmail,cc,bcc,folder;
+    /**
+     * The subject of the mail.
+     */
+    private String subject;
+    /**
+     * The content of the mail, as one long {@link java.lang.String}.
+     */
+    private String content;
+    /**
+     * The E-Mail address of the sender.
+     */
+    private String senderEmail;
+    /**
+     * The E-Mail address of the recipient.
+     */
+    private String recipientEmail;
+    /**
+     * The E-Mail of an additional recipient.
+     */
+    private String cc;
+    /**
+     * The E-Mail of another additional recipient.
+     */
+    private String bcc;
+    /**
+     * The virtual folder this {@link floatingObjects.Mail} is inside. For Example 'drafts'.
+     */
+    private String folder;
+    /**
+     * The date this mail was send.
+     */
 	private Date date = new Date();
+    /**
+     * A id to identify this {@link floatingObjects.Mail}.
+     */
 	private int mail_id;
+    /**
+     * A list containing all attachments as path to the attached {@link java.io.File}.
+     */
 	private ArrayList<String> attachments = new ArrayList<String>();
-	
-	public Mail(int p_mail_id)
+
+    /**
+     * Constructs a new {@link floatingObjects.Mail}.
+     * @param p_mail_id The id that will be used to identify this {@link floatingObjects.Mail}.
+     */
+    public Mail(int p_mail_id)
 	{
 		mail_id = p_mail_id;
 	}
-	
+
+    /**
+     * Adds all new paths in form of {@link java.lang.String}´s to the {@see attachments}.
+     * @param p_allAtachments The new attachments paths.
+     */
 	public void addAttachments(String[] p_allAtachments)
 	{
 		for(String string : p_allAtachments)
@@ -29,6 +74,11 @@ public class Mail implements Serializable
 			attachments.add(string);
 		}
 	}
+
+    /**
+     * Replaces all {@see attachments} with the ones in the parameters. This method will override any attachment given before.
+     * @param p_allAtachments The new attachments paths.
+     */
 	public void replaceAttachments(String[] p_allAtachments)
 	{
 		attachments.clear();
@@ -36,6 +86,11 @@ public class Mail implements Serializable
 	}
 	
 //// Begin : Ultimative getter ////
+    /**
+     * Returns a property of this {@link floatingObjects.Mail}.
+     * @param p_ArgumentToGet The property to get.
+     * @return The requested property, most times a {@link java.lang.String} but not always. It is also possible to get an {@link java.lang.Integer}, a {@link java.util.Date} or a {@link java.lang.String}[].
+     */
     public Object get(String p_ArgumentToGet)
     {
         switch (p_ArgumentToGet)
@@ -56,6 +111,11 @@ public class Mail implements Serializable
     }
 //// End : Ultimative getter ////        
 //// Begin : Ultimative setter ////
+    /**
+     * Sets a new value to a property of this {@link floatingObjects.Mail}.
+     * @param p_setting The property to change. {@see help.txt}
+     * @param p_value The new Property.
+     */
     public void set(String p_setting, String[] p_value)
     {
         switch (p_setting)
