@@ -22,6 +22,10 @@ public class Mail implements Serializable
      */
     private String content;
     /**
+     * The E-Mail address of the sender.
+     */
+    private String senderEmail;
+    /**
      * The E-Mail address of the recipient.
      */
     private String recipientEmail;
@@ -42,7 +46,7 @@ public class Mail implements Serializable
      */
 	private Date date = new Date();
     /**
-     * A id to identify this {@link floatingObjects.Mail}.
+     * A id to identify this {@link floatingObjects.MailF}.
      */
 	private int mail_id;
     /**
@@ -93,6 +97,7 @@ public class Mail implements Serializable
         {
             case "subject": return subject;        
             case "content": return content;
+            case "senderemail": return senderEmail;
             case "recipientemail": return recipientEmail;
             case "cc": return cc;
             case "bcc": return bcc;
@@ -122,6 +127,7 @@ public class Mail implements Serializable
             		{
             			content += s+" ";
             		} break;
+            case "senderemail":senderEmail = p_value[0]; break;
             case "recipientemail":recipientEmail = p_value[0]; break;
             case "cc":cc = p_value[0]; break;
             case "bcc":bcc = p_value[0]; break;
