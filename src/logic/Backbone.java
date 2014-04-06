@@ -15,6 +15,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import MailProcessing.SendMail;
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
@@ -35,6 +36,10 @@ public class Backbone
      * A {@link java.lang.String} representing a path to the folder where the {@link account.Account}&#180;s are saved loaded from.
      */
 	private  String saveFile = "SaveFile";
+    /**
+     *
+     */
+    private SendMail sendMail;
     /**
      * A {@link java.util.ArrayList} containing all {@link account.Account}&#180;s that exist in this {@link logic.Backbone}.
      */
@@ -58,6 +63,7 @@ public class Backbone
      */
 	public Backbone(String[] args) throws JSAPException
 	{
+        sendMail = new SendMail();
         jsap = new JSAP();
 			// Account
 				FlaggedOption opt_name = new FlaggedOption("name").setStringParser(JSAP.STRING_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag('n').setLongFlag("name");
@@ -72,6 +78,13 @@ public class Backbone
 				jsap.registerParameter(opt_outboxserver);
 				FlaggedOption opt_outboxserverport = new FlaggedOption("outboxserverport").setStringParser(JSAP.INTEGER_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag(JSAP.NO_SHORTFLAG).setLongFlag("outboxserverport");
 				jsap.registerParameter(opt_outboxserverport);
+
+                FlaggedOption opt_address = new FlaggedOption("address").setStringParser(JSAP.STRING_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag(JSAP.NO_SHORTFLAG).setLongFlag("address");
+                jsap.registerParameter(opt_address);
+                FlaggedOption opt_username = new FlaggedOption("username").setStringParser(JSAP.STRING_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag(JSAP.NO_SHORTFLAG).setLongFlag("username");
+                jsap.registerParameter(opt_username);
+                FlaggedOption opt_passwd = new FlaggedOption("passwd").setStringParser(JSAP.STRING_PARSER).setDefault(JSAP.NO_DEFAULT).setRequired(false).setShortFlag(JSAP.NO_SHORTFLAG).setLongFlag("passwd");
+                jsap.registerParameter(opt_passwd);
 			// Account
 			
 			// Mail 
@@ -124,6 +137,8 @@ public class Backbone
 					case "rmContact":	 rmContact(); 	break;
 					case "modContact":	 modContact();	break;
 					case "getContact":	 getContact();	break;
+
+                    case "sendMail":     sendMail();    break;
 					
 					case "help":		 printHelp(); 		break;
 					}
@@ -149,7 +164,14 @@ public class Backbone
 			//Account := accountName inboxServer inboxServerPort outboxServer outboxServerPort
 			if(command.contains("name") && command.contains("inboxserver") && command.contains("inboxserverport") && command.contains("outboxserver") && command.contains("outboxserverport"))
 			{
-				accounts.add(new Account(command.getString("name"), command.getString("inboxserver"), command.getInt("inboxserverport"), command.getString("outboxserver"), command.getInt("outboxserverport")));
+				accounts.add(new Account(command.getString("name"),
+                                        command.getString("inboxserver"),
+                                        command.getInt("inboxserverport"),
+                                        command.getString("outboxserver"),
+                                        command.getInt("outboxserverport"),
+                                        command.getString("address"),
+                                        command.getString("username"),
+                                        command.getString("passwd")));
 			}
 			else
 			{
@@ -394,6 +416,32 @@ public class Backbone
 			}
 		}
 	//// End : Contact
+
+    private void sendMail()
+    {
+        //Mail := accountname mail_id
+        if(command.contains("name") && command.contains("mail_id"))
+        {
+            for(Account account : accounts)
+            {
+                if(account.get("name").equals(command.getString("name")))
+                {
+                    sendMail.sendMail(
+                            (String) account.get("outboxserver"),
+                            (String) account.get("username"),
+                            (String) account.get("passwd"),
+                            (String) account.get("address"),
+                            (String) account.getMail(command.getInt("mail_id"),"recipientemail"),
+                            (String) account.getMail(command.getInt("mail_id"),"cc"),
+                            (String) account.getMail(command.getInt("mail_id"),"bcc"),
+                            (String) account.getMail(command.getInt("mail_id"),"subject"),
+                            (String) account.getMail(command.getInt("mail_id"),"content"),
+                            (ArrayList<String>) account.getMail(command.getInt("mail_id"),"attachments")
+                    );
+                }
+            }
+        }
+    }
 
     /**
      * Prints the {@link java.io.File} {@see help.txt}.
