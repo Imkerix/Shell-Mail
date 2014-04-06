@@ -26,7 +26,18 @@ public class Account implements Serializable
      * The outbox server used by the {@link account.Account}
      */
 	private OutboxServer outboxServer;
-
+    /**
+     * The username registered by the server
+     */
+    private String username;
+    /**
+     * The E-Mail address of the account
+     */
+    private String address;
+    /**
+     * The password of the address
+     */
+    private String passwd;
     /**
      * A {@link java.util.ArrayList} used to store {@link floatingObjects.Mail} objects.
      */
@@ -43,12 +54,18 @@ public class Account implements Serializable
      * @param p_inboxServerPort The port used by the {@link account.InboxServer}.
      * @param p_outboxServer The url used by the {@link account.OutboxServer} of the {@link account.Account}
      * @param p_outboxServerPort The port used by the {@link account.OutboxServer}.
+     * @param p_address The email adress used by this account.
+     * @param p_username The username used to authenticate at the server of this account.
+     * @param p_passwd The users password.
      */
-	public Account(String p_accName, String p_inboxServer, int p_inboxServerPort, String p_outboxServer, int p_outboxServerPort)
+	public Account(String p_accName, String p_inboxServer, int p_inboxServerPort, String p_outboxServer, int p_outboxServerPort, String p_address, String p_username, String p_passwd)
 	{
 		name = p_accName;
 		inboxServer = new InboxServer(p_inboxServer, p_inboxServerPort);
 		outboxServer = new OutboxServer(p_outboxServer, p_outboxServerPort);
+        address = p_address;
+        username = p_username;
+        passwd = p_passwd;
 	}
 
 	//// Begin : Mail ////
@@ -99,31 +116,37 @@ public class Account implements Serializable
      * Returns a property of the {@link floatingObjects.Mail} represented by the parameters.
      * @param p_mail_id The id of the {@link floatingObjects.Mail} to get the property from.
      * @param p_ArgumentToGet The name of the property to get.
+     * @return The object requested by {@see p_ArgumentToGet}.
      */
-    public void getMail(int p_mail_id, String p_ArgumentToGet)
+    public Object getMail(int p_mail_id, String p_ArgumentToGet)
 	{
-		for (Mail mail : mails)
+        Object ret = null;
+        for (Mail mail : mails)
 		{
-			if ((int) mail.get("mail_id") == p_mail_id)
+            if ((int) mail.get("mail_id") == p_mail_id)
 			{
 				if(p_ArgumentToGet.equals("attachments"))
 				{
-					for(String s : (ArrayList<String>) mail.get(p_ArgumentToGet))
+                    ret = (ArrayList<String>) mail.get(p_ArgumentToGet);
+                    for(String s : (ArrayList<String>) mail.get(p_ArgumentToGet))
 					{
-						System.out.println(s);
-					}
-				}
+                        System.out.println(s);
+                    }
+                }
 				else if(p_ArgumentToGet.equals("date"))
 				{
 					SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                     System.out.println(formatter.format((Date)mail.get("date")));
+                    ret = formatter.format((Date)mail.get("date"));
 				}
 				else
 				{
 					System.out.println(mail.get(p_ArgumentToGet));
+                    ret = mail.get(p_ArgumentToGet);
 				}
 			}
 		}
+        return ret;
 	}
 
     /**
@@ -293,6 +316,12 @@ public class Account implements Serializable
 			return outboxServer.getOutboxServer();
 		case "outboxserverport":
 			return outboxServer.getPort();
+        case "address":
+            return address;
+        case "username":
+            return username;
+        case "passwd":
+            return passwd;
 
 		default:
 			return "Account oder Argument fehlerhaft";
@@ -326,6 +355,15 @@ public class Account implements Serializable
 		case "outboxserverport":
 			outboxServer.setPort(Integer.parseInt(p_ValueToSet));
 			break;
+        case "address":
+            address = p_ValueToSet;
+            break;
+        case "username":
+            username = p_ValueToSet;
+            break;
+        case "passwd":
+            passwd = p_ValueToSet;
+            break;
 		}
 	}
 	//// End : Ultimative setter ////   
